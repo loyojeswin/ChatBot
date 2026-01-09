@@ -1,10 +1,16 @@
-from flask import Flask, request, jsonify
+from flask import Flask, request, jsonify, send_from_directory
+from flask_cors import CORS
 from nltk.tokenize import word_tokenize
 import pickle
 import json
 import random
 
 app = Flask(__name__)
+CORS(app)  # Enable CORS for all routes
+
+# Define the same tokenizer function used during training
+def custom_tokenizer(text):
+    return word_tokenize(text.lower())
 
 # Load trained model
 with open('chatbot_model.pkl', 'rb') as f:
@@ -17,6 +23,10 @@ with open('label_encoder.pkl', 'rb') as f:
 # Load intents
 with open('intents.json') as file:
     intents_data = json.load(file)
+
+@app.route('/')
+def home():
+    return send_from_directory('.', 'index.html')
 
 @app.route('/api/chat', methods=['POST'])
 def chat_api():
@@ -36,23 +46,18 @@ def chat_api():
     intent_tag = label_encoder.inverse_transform([predicted_label])[0]
     
     # Get response
+    response = "I'm not sure I understand."
     if confidence > 0.5:
         for intent in intents_data['intents']:
             if intent['tag'] == intent_tag:
                 response = random.choice(intent['responses'])
                 break
-    else:
-        response = "I'm not sure I understand."
     
     return jsonify({
         'response': response,
         'intent': intent_tag,
         'confidence': confidence
     })
-
-@app.route('/')
-def home():
-    return "Chatbot API is running! Use POST /api/chat to interact."
 
 if __name__ == '__main__':
     app.run(debug=True, port=5000)
