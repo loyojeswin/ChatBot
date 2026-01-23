@@ -89,9 +89,9 @@ def chat():
     while True:
         user_input = input("\nYou: ")
         
-        if user_input.lower() in ['quit', 'exit', 'bye']:
-            print("ML Chatbot: Goodbye!")
-            break
+        # if user_input.lower() in ['quit', 'exit', 'bye']:
+        #     print("ML Chatbot: Goodbye!")
+        #     break
         
         response = get_response(user_input)
         print(f"ML Chatbot: {response}")

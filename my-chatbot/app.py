@@ -13,15 +13,15 @@ def custom_tokenizer(text):
     return word_tokenize(text.lower())
 
 # Load trained model
-with open('chatbot_model.pkl', 'rb') as f:
+with open(r'my-chatbot\chatbot_model.pkl', 'rb') as f:
     model = pickle.load(f)
-with open('vectorizer.pkl', 'rb') as f:
+with open(r'my-chatbot\vectorizer.pkl', 'rb') as f:
     vectorizer = pickle.load(f)
-with open('label_encoder.pkl', 'rb') as f:
+with open(r'my-chatbot\label_encoder.pkl', 'rb') as f:
     label_encoder = pickle.load(f)
 
 # Load intents
-with open('intents.json') as file:
+with open(r'my-chatbot\intents.json') as file:
     intents_data = json.load(file)
 
 @app.route('/')
