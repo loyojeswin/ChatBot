@@ -13,16 +13,17 @@ def custom_tokenizer(text):
     return word_tokenize(text.lower())
 
 # Load trained model
-with open(r'my-chatbot\chatbot_model.pkl', 'rb') as f:
+with open('chatbot_model.pkl', 'rb') as f:
     model = pickle.load(f)
-with open(r'my-chatbot\vectorizer.pkl', 'rb') as f:
+with open('vectorizer.pkl', 'rb') as f:
     vectorizer = pickle.load(f)
-with open(r'my-chatbot\label_encoder.pkl', 'rb') as f:
+with open('label_encoder.pkl', 'rb') as f:
     label_encoder = pickle.load(f)
 
 # Load intents
-with open(r'my-chatbot\intents.json') as file:
+with open('intents.json') as file:
     intents_data = json.load(file)
+
 
 @app.route('/')
 def home():
@@ -47,7 +48,7 @@ def chat_api():
     
     # Get response
     response = "I'm not sure I understand."
-    if confidence > 0.5:
+    if confidence > 0.2:
         for intent in intents_data['intents']:
             if intent['tag'] == intent_tag:
                 response = random.choice(intent['responses'])
